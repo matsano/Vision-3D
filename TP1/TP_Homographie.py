@@ -70,8 +70,10 @@ h_homographie = V[-1, :]
 
 # Obtenir la matrice d'homographie H
 H = h_homographie.reshape(3, 3)
+print("H calculado =", H)
 # Votre code d'estimation de H ici
 H,_ = cv2.findHomography(X_init, X_final)
+print("H pronto =", H)
 
 # Juste un exemple pour afficher quelque chose
 # H = np.array([[1.1, 0.0, 10.0], [0.5, 0.9, -25.0], [0.0, 0.0, 1.0]])
