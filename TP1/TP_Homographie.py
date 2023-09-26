@@ -46,12 +46,35 @@ for i in range(points_selected):
 	X_final[i] = input(string_input).split(" ",2)
 print("X_final =",X_final)
 
-# Votre code d'estimation de H ici
 
 # Votre code d'estimation de H ici
+
+# Normaliser les coordonnees
+# X_init = (X_init - np.min(X_init)) / (np.max(X_init) - np.min(X_init))
+# X_final = (X_final - np.min(X_final)) / (np.max(X_final) - np.min(X_final))
+
+# Calculer la matrice A
+A = []
+for i in range(points_selected):
+    ax = np.array([-X_init[i][0], -X_init[i][1], -1, 0, 0, 0, X_final[i][0]*X_init[i][0], X_final[i][0]*X_init[i][1], X_final[i][0]])
+    ay = np.array([0, 0, 0, -X_init[i][0], -X_init[i][1], -1, X_final[i][1]*X_init[i][0], X_final[i][1]*X_init[i][1], X_final[i][1]])
+    A.append(ax)
+    A.append(ay)
+
+A = np.vstack(A)
+
+# Obtenir h
+U, S, V = np.linalg.svd(A)
+# h_homographie = V[:, -1]
+h_homographie = V[-1, :]
+
+# Obtenir la matrice d'homographie H
+H = h_homographie.reshape(3, 3)
+# Votre code d'estimation de H ici
+H,_ = cv2.findHomography(X_init, X_final)
 
 # Juste un exemple pour afficher quelque chose
-H = np.array([[1.1, 0.0, 10.0], [0.5, 0.9, -25.0], [0.0, 0.0, 1.0]])
+# H = np.array([[1.1, 0.0, 10.0], [0.5, 0.9, -25.0], [0.0, 0.0, 1.0]])
 img_warp = cv2.warpPerspective(clone, H, (w,h))
 cv2.imshow("Image rectifiÃ©e",img_warp)
 cv2.waitKey(0)
