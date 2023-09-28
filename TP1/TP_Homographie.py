@@ -30,11 +30,6 @@ points_selected = 0
 X_init = []
 cv2.namedWindow("Image initiale")
 cv2.setMouseCallback("Image initiale",select_points)
-# X_init = [[144,  46],
-#  [112, 254],
-#  [369, 261],
-#  [355, 47]]
-# points_selected = 4
 
 while True:
 	cv2.imshow("Image initiale",img)
