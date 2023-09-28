@@ -30,12 +30,12 @@ points_selected = 0
 X_init = []
 cv2.namedWindow("Image initiale")
 # CHANGER
-# cv2.setMouseCallback("Image initiale",select_points)
-X_init = [[144,  46],
- [112, 254],
- [369, 261],
- [355, 47]]
-points_selected = 4
+cv2.setMouseCallback("Image initiale",select_points)
+# X_init = [[144,  46],
+#  [112, 254],
+#  [369, 261],
+#  [355, 47]]
+# points_selected = 4
 
 while True:
 	cv2.imshow("Image initiale",img)
@@ -53,34 +53,54 @@ for i in range(points_selected):
 print("X_final =",X_final)
 
 
-# Votre code d'estimation de H ici
+#### Votre code d'estimation de H ici
 
-# Normaliser les coordonnees
-# X_init = (X_init - np.min(X_init)) / (np.max(X_init) - np.min(X_init))
-# X_final = (X_final - np.min(X_final)) / (np.max(X_final) - np.min(X_final))
+# Coordonnees au format (x, y, 1)
+X_init_norm = np.hstack((X_init, np.ones((X_init.shape[0], 1))))
+X_final_norm = np.hstack((X_final, np.ones((X_final.shape[0], 1))))
+
+# Normalisation des coordonnees
+T_norm = np.array([[1/w, 0, -1],
+                  [0, 1/h, -1],
+                  [0, 0, 1]])
+X_init_norm = np.dot(T_norm, np.transpose(X_init_norm))
+X_init_norm = np.transpose(X_init_norm)
+
+X_final_norm = np.dot(T_norm, np.transpose(X_final_norm))
+X_final_norm = np.transpose(X_final_norm)
+
+# Retourner les coordonnees au format (x, y)
+X_init_norm = X_init_norm[:, :-1]
+X_final_norm = X_final_norm[:, :-1]
 
 # Calculer la matrice A
 A = []
 for i in range(points_selected):
-    ax = np.array([-X_init[i][0], -X_init[i][1], -1, 0, 0, 0, X_final[i][0]*X_init[i][0], X_final[i][0]*X_init[i][1], X_final[i][0]])
-    ay = np.array([0, 0, 0, -X_init[i][0], -X_init[i][1], -1, X_final[i][1]*X_init[i][0], X_final[i][1]*X_init[i][1], X_final[i][1]])
+    ax = np.array([-X_init_norm[i][0], -X_init_norm[i][1], -1, 0, 0, 0, X_final_norm[i][0]*X_init_norm[i][0], X_final_norm[i][0]*X_init_norm[i][1], X_final_norm[i][0]])
+    ay = np.array([0, 0, 0, -X_init_norm[i][0], -X_init_norm[i][1], -1, X_final_norm[i][1]*X_init_norm[i][0], X_final_norm[i][1]*X_init_norm[i][1], X_final_norm[i][1]])
     A.append(ax)
     A.append(ay)
 
 A = np.vstack(A)
 
-# Obtenir h
+# Obtenir h (derniere ligne de V = dernier vecteur propre)
 U, S, V = np.linalg.svd(A)
 h_homographie = V[-1, :]
 
 # Obtenir la matrice d'homographie H
 H = h_homographie.reshape(3, 3)
-H = H/V[-1][-1]
+
+# De-normaliser la solution
+H = np.dot(np.linalg.inv(T_norm), H)
+H = np.dot(H, T_norm)
+H = H/H[-1, -1]
+print("H =", H)
 
 # Fonction qui génère la matrice d'homographie
 H = cv2.getPerspectiveTransform(X_init,X_final)
+print("H_funcao =", H)
 
-# Votre code d'estimation de H ici
+#### Votre code d'estimation de H ici
 
 # Juste un exemple pour afficher quelque chose
 # H = np.array([[1.1, 0.0, 10.0], [0.5, 0.9, -25.0], [0.0, 0.0, 1.0]])

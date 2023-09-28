@@ -75,10 +75,13 @@ h_homographie = V[-1, :]
 
 # Obtenir la matrice d'homographie H
 H = h_homographie.reshape(3, 3)
-H = H/V[-1][-1]
+H = H/H[-1, -1]
+
+print("H =", H)
 
 # Fonction qui génère la matrice d'homographie
 H = cv2.getPerspectiveTransform(X_init,X_final)
+print("H_func =", H)
 
 # Votre code d'estimation de H ici
 
