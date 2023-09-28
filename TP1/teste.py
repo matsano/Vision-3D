@@ -24,3 +24,9 @@ X_init_norm = X_init_norm[:, :-1]
 print(X_init_norm)
 
 print(np.linalg.inv(T_norm))
+
+# Levanta uma exceção do tipo ValueError com uma mensagem personalizada
+a = 0
+b = 2
+if (a == b):
+    raise ValueError("Isso é um erro personalizado.")
