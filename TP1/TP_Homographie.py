@@ -29,7 +29,6 @@ clone = img.copy()
 points_selected = 0
 X_init = []
 cv2.namedWindow("Image initiale")
-# CHANGER
 cv2.setMouseCallback("Image initiale",select_points)
 # X_init = [[144,  46],
 #  [112, 254],
@@ -94,16 +93,13 @@ H = h_homographie.reshape(3, 3)
 H = np.dot(np.linalg.inv(T_norm), H)
 H = np.dot(H, T_norm)
 H = H/H[-1, -1]
-print("H =", H)
 
 # Fonction qui génère la matrice d'homographie
-H = cv2.getPerspectiveTransform(X_init,X_final)
-print("H_funcao =", H)
+# H = cv2.getPerspectiveTransform(X_init,X_final)
 
 #### Votre code d'estimation de H ici
 
 # Juste un exemple pour afficher quelque chose
-# H = np.array([[1.1, 0.0, 10.0], [0.5, 0.9, -25.0], [0.0, 0.0, 1.0]])
 img_warp = cv2.warpPerspective(clone, H, (w,h))
 cv2.imshow("Image rectifiee",img_warp)
 cv2.waitKey(0)
