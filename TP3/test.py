@@ -1,16 +1,21 @@
 import numpy as np
 
 # Créez une matrice NumPy de test
-matrice = np.array([[1, 2, 3],
+U = np.array([[1, 2, 3],
                     [4, 5, 6],
                     [7, 8, 9]])
 
-translation = np.array([[0, -0.1, 0.1]]).T
+V = np.array([[9, 10, 11],
+                    [12, 13, 14],
+                    [15, 16, 17]])
 
-points = matrice + translation
+sum = V * U.T
 
-print("points antes =",points)
+print("UT =", U.T)
 
-points -= translation
-print("points dps =",points)
+print("sum =", sum)
+
+sum = np.dot(U, V)
+
+print("sum =", sum)
 

@@ -105,22 +105,35 @@ def best_rigid_transform(data, ref):
     '''
 
     # Barycenters
-    # d�finir les baycentres ref_center et data_center
+    # definir les baycentres ref_center et data_center
+    ref_center = np.mean(ref, axis=1)
+    ref_center = ref_center.reshape(3, 1)
+    
+    data_center = np.mean(data, axis=1)
+    data_center = data_center.reshape(3, 1)
     
     # Centered clouds
-    # calculer les nuages de points centr�s ref_c et data_c
-
+    # calculer les nuages de points centres ref_c et data_c
+    ref_c = ref - ref_center
+    data_c = data - data_center
+    
     # H matrix
     # calculer la matrice H
+    H = np.dot(data_c, ref_c.T)
 
     # SVD on H
     # calculer U, S, et Vt en utilisant np.linalg.svd
+    U, S, Vt = np.linalg.svd(H)
 
     # Checking R determinant
-    # si le d�terminant de U est -1, prendre son oppos�
+    # si le determinant de U est -1, prendre son oppose
+    if np.linalg.det(U) == -1:
+        U = -U
 
     # Getting R and T
     # calculer R et T
+    R = np.dot(Vt.T, U.T)
+    T = ref_center - np.dot(R, data_center)
 
     return R, T
 
@@ -227,7 +240,7 @@ if __name__ == '__main__':
         show3D(decimated)
         write_data_ply(decimated,NDC_r_path)
 
-    if True:
+    if False:
         # Translation
         translation = np.array([[0, -0.1, 0.1]]).T
         points = bunny_o + translation
@@ -266,7 +279,7 @@ if __name__ == '__main__':
 
     # Meilleure transformation rigide (R,Tr) entre nuages de points
     # -------------------------------------------------------------
-    if False:
+    if True:
 
         show3D(bunny_p)
         
