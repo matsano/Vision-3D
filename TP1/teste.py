@@ -1,32 +1,6 @@
 import numpy as np
 
-X_init = np.array([[0,       0],
-                   [0,     500],
-                   [700,   500],
-                   [700,     0]])
+vet1 = np.array([1, 3, 5, 7, 9], [2, 4, 6, 8, 10])
+vet2 = np.array([2, 4, 6, 8, 10], [1, 3, 5, 7, 9])
 
-T_norm = np.array([[2/700,  0,       -1],
-                   [0,      2/500,   -1],
-                   [0,      0,        1]])
-
-X_init = np.hstack((X_init, np.ones((X_init.shape[0], 1))))
-
-print(X_init)
-
-X_init_norm = np.dot(T_norm, np.transpose(X_init))
-
-print(X_init_norm)
-
-X_init_norm = np.transpose(X_init_norm)
-print(X_init_norm)
-
-X_init_norm = X_init_norm[:, :-1]
-print(X_init_norm)
-
-print(np.linalg.inv(T_norm))
-
-# Levanta uma exceção do tipo ValueError com uma mensagem personalizada
-a = 0
-b = 2
-if (a == b):
-    raise ValueError("Isso é um erro personalizado.")
+print(np.maximum(vet1, vet2))

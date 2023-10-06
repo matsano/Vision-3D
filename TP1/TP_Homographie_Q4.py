@@ -125,13 +125,34 @@ H = H/H[-1, -1]
 print("H =", H)
 
 # Fonction qui génère la matrice d'homographie
-H = cv2.getPerspectiveTransform(X_init,X_final)
-print("H_func =", H)
+# H = cv2.getPerspectiveTransform(X_init,X_final)
+# print("H_func =", H)
 
 ### Votre code d'estimation de H ici
 
-# # Juste un exemple pour afficher quelque chose
-# img_warp = cv2.warpPerspective(clone1, H, (w1,h1))
-# cv2.imshow("Image rectifiee",img_warp)
-# cv2.waitKey(0)
+# Apliquer la matrice d'homographie
+img_warp = cv2.warpPerspective(clone1, H, (w1,h1))
 
+# Fusion des images
+panorama = np.maximum(img_warp, img2)
+# panorama = cv2.addWeighted(img1, 0.5, img_warp, 0.5, 0)
+# print("panorama =", panorama)
+cv2.imshow("Panorama", panorama)
+cv2.waitKey(0)
+
+
+
+
+# heigth = np.maximum(img1.shape[0], img2.shape[0])
+# width = np.maximum(img1.shape[1], img2.shape[1])
+# panorama = np.zeros((heigth,width,3), dtype=np.uint8)
+
+# img_ref_pad = []
+# img_ref_pad = cv2.copyMakeBorder(img1, 0, panorama.shape[0]-img1.shape[0], 0, panorama.shape[1]-img1.shape[1], cv2.BORDER_CONSTANT, value=[0, 0, 0])
+
+# for i in range(0, panorama.shape[0]):
+#     for j in range(0, panorama.shape[1]):
+#         panorama[i][j] = np.maximum(img_ref_pad[i][j], img2[i][j])
+
+# cv2.imshow("Panorama", panorama)
+# cv2.waitKey(0)
