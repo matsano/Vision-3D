@@ -66,20 +66,26 @@ def decimate(data,k_ech):
         decimated = matrice (3 x (n/k_ech))
     '''
 
-    if True:    
-        # 1�re m�thode : boucle for
+    if False:
+        # 1ere methode : boucle for
         n = data.shape[1]
         n_ech=int(n/k_ech)
         
         decimated = np.vstack(data[:, 0])
-        for i in range(n_ech):
+        for i in range(1, n_ech):
             Xi = np.vstack(data[:, k_ech*i])
-            decimated = np.hstack((decimated, Xi))
+            decimated = np.hstack((decimated, Xi))  
 
-    #else:
-        # 2e m�thode : fonction de Numpy array
-        #decimated = sous-tableau des colonnes espac�es de k_ech
-        
+    else:
+        # 2e methode : fonction de Numpy array
+        n = data.shape[1]
+        n_ech=int(n/k_ech)
+        # Selectionner des colonnes avec un facteur d'echelle k_ech
+        col_index = np.arange(0, n, k_ech)[:n_ech]
+
+        # Sous-echantillonager le nuage de points
+        decimated = data[:, col_index]
+    
     return(decimated)
 
 
@@ -202,8 +208,8 @@ if __name__ == '__main__':
 
     # Transformations : d�cimation, rotation, translation, �chelle
     # ------------------------------------------------------------
-    if False:
-        # D�cimation        
+    if True:
+        # D�cimation
         k_ech=10
         decimated = decimate(bunny_o,k_ech)
         
@@ -214,9 +220,9 @@ if __name__ == '__main__':
         write_data_ply(decimated,bunny_r_path)
         # Puis ouvrir le fichier sous CloudCompare pour le visualiser
 
-    if False:
+    if True:
         show3D(NDC_o)
-        decimated = decimate(NDC_o,1000)
+        decimated = decimate(NDC_o,100)
         show3D(decimated)
         write_data_ply(decimated,NDC_r_path)
 
