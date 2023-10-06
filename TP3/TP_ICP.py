@@ -72,6 +72,7 @@ def decimate(data,k_ech):
         n_ech=int(n/k_ech)
         
         decimated = np.vstack(data[:, 0])
+        # Selectionnez n_ech colonnes à un pas de k_ech
         for i in range(1, n_ech):
             Xi = np.vstack(data[:, k_ech*i])
             decimated = np.hstack((decimated, Xi))  
@@ -208,7 +209,7 @@ if __name__ == '__main__':
 
     # Transformations : d�cimation, rotation, translation, �chelle
     # ------------------------------------------------------------
-    if True:
+    if False:
         # D�cimation
         k_ech=10
         decimated = decimate(bunny_o,k_ech)
@@ -220,36 +221,46 @@ if __name__ == '__main__':
         write_data_ply(decimated,bunny_r_path)
         # Puis ouvrir le fichier sous CloudCompare pour le visualiser
 
-    if True:
+    if False:
         show3D(NDC_o)
-        decimated = decimate(NDC_o,100)
+        decimated = decimate(NDC_o,1000)
         show3D(decimated)
         write_data_ply(decimated,NDC_r_path)
 
-    if False:        
+    if True:
         # Translation
-        # translation = d�finir vecteur [0, -0.1, 0.1] avec np.array et reshape
-        points=bunny_o + translation
-        show3D(points)
+        translation = np.array([[0, -0.1, 0.1]]).T
+        points = bunny_o + translation
+        # show3D(points)
         
         # Find the centroid of the cloud and center it
-        #centroid = barycentre - utiliser np.mean(points, axis=1) et reshape
+        centroid = np.mean(points, axis=1)
+        centroid = centroid.reshape(3, 1)
         points = points - centroid
-        show3D(points)
+        # show3D(points)
         
         # Echelle
-        # points = points divis�s par 2
+        # points = points divises par 2
+        points /= 2
         show3D(points)
         
         # Define the rotation matrix (rotation of angle around z-axis)
-        # angle de pi/3,
-        # d�finir R avec np.array et les cos et sin.
+        theta = np.pi / 3
+        R = np.array([[np.cos(theta), -np.sin(theta), 0],
+                      [np.sin(theta), np.cos(theta), 0],
+                      [0, 0, 1]])
         
         # Apply the rotation
         points=bunny_o
-        # centrer le nuage de points        
-        # appliquer la rotation - utiliser la fonction .dot
-        # appliquer la translation oppos�e
+        # centrer le nuage de points
+        centroid = np.mean(points, axis=1)
+        centroid = centroid.reshape(3, 1)
+        points = points - centroid
+        # appliquer la rotation
+        points = np.dot(R, points)
+        # appliquer la translation opposee
+        points -= translation
+        
         show3D(points)
 
 
