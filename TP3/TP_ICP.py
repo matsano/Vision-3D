@@ -16,6 +16,8 @@ from sklearn.neighbors import KDTree
 from utils.ply import write_ply, read_ply
 # utils.ply est le chemin relatif utils/ply.py
 
+import time
+
 
 def read_data_ply(path):
 # Lecture de nuage de points sous format ply
@@ -57,11 +59,11 @@ def show3D(data):
 
 def decimate(data,k_ech):
     '''
-    D�cimation
+    Decimation
     # ----------
     Inputs :
         data = matrice (3 x n)
-        k_ech : facteur de d�cimation
+        k_ech : facteur de decimation
     Output :
         decimated = matrice (3 x (n/k_ech))
     '''
@@ -81,6 +83,7 @@ def decimate(data,k_ech):
         # 2e methode : fonction de Numpy array
         n = data.shape[1]
         n_ech=int(n/k_ech)
+        
         # Selectionner des colonnes avec un facteur d'echelle k_ech
         col_index = np.arange(0, n, k_ech)[:n_ech]
 
@@ -219,20 +222,24 @@ if __name__ == '__main__':
     NDC_o2=read_data_ply(NDC_o2_path)
 
     # Visualisation du fichier d'origine
-    if True:
+    if False:
         show3D(bunny_o)
 
     # Transformations : d�cimation, rotation, translation, �chelle
     # ------------------------------------------------------------
     if False:
-        # D�cimation
+        # Decimation
         k_ech=10
-        decimated = decimate(bunny_o,k_ech)
         
-        # Visualisation sous Python et par �criture de fichier
+        start_time = time.time()
+        decimated = decimate(bunny_o,k_ech)
+        end_time = time.time()
+        print("Execution time =", end_time-start_time, "seconds")
+        
+        # Visualisation sous Python et par ecriture de fichier
         show3D(decimated)
         
-        # Visualisation sous CloudCompare apr�s �criture de fichier
+        # Visualisation sous CloudCompare apres ecriture de fichier
         write_data_ply(decimated,bunny_r_path)
         # Puis ouvrir le fichier sous CloudCompare pour le visualiser
 
@@ -281,13 +288,12 @@ if __name__ == '__main__':
 
     # Meilleure transformation rigide (R,Tr) entre nuages de points
     # -------------------------------------------------------------
-    if False:
+    if True:
 
         show3D(bunny_p)
         
         # Find the best transformation
         R, Tr = best_rigid_transform(bunny_p, bunny_o)
-        
         
         # Apply the tranformation
         opt = R.dot(bunny_p) + Tr
@@ -296,7 +302,6 @@ if __name__ == '__main__':
         # Show and save cloud
         show3D(bunny_r_opt)
         write_data_ply(bunny_r_opt,bunny_r_path)
-        
         
         # Get average distances
         distances2_before = np.sum(np.power(bunny_p - bunny_o, 2), axis=0)
@@ -311,7 +316,7 @@ if __name__ == '__main__':
    
     # Test ICP and visualize
     # **********************
-    if True:
+    if False:
         # Nuage bunny
         # bunny_p_opt, R_list, T_list, neighbors_list, RMS_list = icp_point_to_point(bunny_p, bunny_o, 25, 1e-4)
         
