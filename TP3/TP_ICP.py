@@ -209,12 +209,14 @@ if __name__ == '__main__':
     bunny_p_path = 'data/bunny_perturbed.ply'
     bunny_r_path = 'data/bunny_returned.ply'
     NDC_o_path = 'data/Notre_Dame_Des_Champs_1.ply'
+    NDC_o2_path = 'data/Notre_Dame_Des_Champs_2.ply'
     NDC_r_path = 'data/Notre_Dame_Des_Champs_returned.ply'
 
     # Lecture des fichiers
     bunny_o=read_data_ply(bunny_o_path)                    
     bunny_p=read_data_ply(bunny_p_path)
     NDC_o=read_data_ply(NDC_o_path)
+    NDC_o2=read_data_ply(NDC_o2_path)
 
     # Visualisation du fichier d'origine
     if True:
@@ -244,13 +246,13 @@ if __name__ == '__main__':
         # Translation
         translation = np.array([[0, -0.1, 0.1]]).T
         points = bunny_o + translation
-        # show3D(points)
+        show3D(points)
         
         # Find the centroid of the cloud and center it
         centroid = np.mean(points, axis=1)
         centroid = centroid.reshape(3, 1)
         points = points - centroid
-        # show3D(points)
+        show3D(points)
         
         # Echelle
         # points = points divises par 2
@@ -279,7 +281,7 @@ if __name__ == '__main__':
 
     # Meilleure transformation rigide (R,Tr) entre nuages de points
     # -------------------------------------------------------------
-    if True:
+    if False:
 
         show3D(bunny_p)
         
@@ -309,11 +311,24 @@ if __name__ == '__main__':
    
     # Test ICP and visualize
     # **********************
-    if False:
-
-        bunny_p_opt, R_list, T_list, neighbors_list, RMS_list = icp_point_to_point(bunny_p, bunny_o, 25, 1e-4)
+    if True:
+        # Nuage bunny
+        # bunny_p_opt, R_list, T_list, neighbors_list, RMS_list = icp_point_to_point(bunny_p, bunny_o, 25, 1e-4)
+        
+        # Nuages Notre Dame des Champs 1 (reference) et 2 (modifie)
+        # NDC_opt, R_list, T_list, neighbors_list, RMS_list = icp_point_to_point(NDC_o2, NDC_o, 25, 1e-4)
+        
+        # Nuages NDC echantillonnes
+        decimated_1 = decimate(NDC_o,1000)
+        decimated_2 = decimate(NDC_o2,1000)
+        NDC_opt, R_list, T_list, neighbors_list, RMS_list = icp_point_to_point(decimated_2, decimated_1, 25, 1e-4)
+        
+        # Tracer l'evolution de f
         plt.plot(RMS_list)
         plt.show()
+        
+        ### FALAAAAAAAAAAAAAAAAAAAAAAR SOBRE O TEMPO DO NAO ECHANTILLONNES
+        ### E TAMBEM VERIFICAR SE ESTA CERTO
 
 
 
