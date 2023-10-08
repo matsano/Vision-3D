@@ -100,7 +100,7 @@ def best_rigid_transform(data, ref):
     Computes the least-squares best-fit transform that maps corresponding points data to ref.
     Inputs :
         data = (d x N) matrix where "N" is the number of point and "d" the dimension
-         ref = (d x N) matrix where "N" is the number of point and "d" the dimension
+        ref = (d x N) matrix where "N" is the number of point and "d" the dimension
     Returns :
            R = (d x d) rotation matrix
            T = (d x 1) translation vector
@@ -108,7 +108,7 @@ def best_rigid_transform(data, ref):
     '''
 
     # Barycenters
-    # definir les baycentres ref_center et data_center
+    # definir les barycentres ref_center et data_center
     ref_center = np.mean(ref, axis=1)
     ref_center = ref_center.reshape(3, 1)
     
@@ -222,12 +222,12 @@ if __name__ == '__main__':
     NDC_o2=read_data_ply(NDC_o2_path)
 
     # Visualisation du fichier d'origine
-    if False:
+    if True:
         show3D(bunny_o)
 
     # Transformations : d�cimation, rotation, translation, �chelle
     # ------------------------------------------------------------
-    if False:
+    if True:
         # Decimation
         k_ech=10
         
@@ -243,13 +243,13 @@ if __name__ == '__main__':
         write_data_ply(decimated,bunny_r_path)
         # Puis ouvrir le fichier sous CloudCompare pour le visualiser
 
-    if False:
+    if True:
         show3D(NDC_o)
         decimated = decimate(NDC_o,1000)
         show3D(decimated)
         write_data_ply(decimated,NDC_r_path)
 
-    if False:
+    if True:
         # Translation
         translation = np.array([[0, -0.1, 0.1]]).T
         points = bunny_o + translation
@@ -316,26 +316,30 @@ if __name__ == '__main__':
    
     # Test ICP and visualize
     # **********************
-    if False:
+    if True:
         # Nuage bunny
-        # bunny_p_opt, R_list, T_list, neighbors_list, RMS_list = icp_point_to_point(bunny_p, bunny_o, 25, 1e-4)
+        start_time = time.time()
+        bunny_p_opt, R_list, T_list, neighbors_list, RMS_list = icp_point_to_point(bunny_p, bunny_o, 25, 1e-4)
+        end_time = time.time()
+        print("Execution time =", end_time-start_time, "seconds")
         
         # Nuages Notre Dame des Champs 1 (reference) et 2 (modifie)
-        # NDC_opt, R_list, T_list, neighbors_list, RMS_list = icp_point_to_point(NDC_o2, NDC_o, 25, 1e-4)
+        start_time = time.time()
+        NDC_opt, R_list, T_list, neighbors_list, RMS_list = icp_point_to_point(NDC_o2, NDC_o, 25, 1e-4)
+        end_time = time.time()
+        print("Execution time =", end_time-start_time, "seconds")
         
         # Nuages NDC echantillonnes
         decimated_1 = decimate(NDC_o,1000)
         decimated_2 = decimate(NDC_o2,1000)
+        start_time = time.time()
         NDC_opt, R_list, T_list, neighbors_list, RMS_list = icp_point_to_point(decimated_2, decimated_1, 25, 1e-4)
+        end_time = time.time()
+        print("Execution time =", end_time-start_time, "seconds")
         
         # Tracer l'evolution de f
+        plt.xlabel("Number of iterations")
+        plt.ylabel("f (R,t)")
         plt.plot(RMS_list)
         plt.show()
         
-        ### FALAAAAAAAAAAAAAAAAAAAAAAR SOBRE O TEMPO DO NAO ECHANTILLONNES
-        ### E TAMBEM VERIFICAR SE ESTA CERTO
-
-
-
-
-
