@@ -311,7 +311,7 @@ if __name__ == '__main__':
         
         print('Average RMS between points :')
         print('Before = {:.3f}'.format(RMS_before))
-        print(' After = {:.3f}'.format(RMS_after))
+        print('After = {:.3f}'.format(RMS_after))
     
    
     # Test ICP and visualize
