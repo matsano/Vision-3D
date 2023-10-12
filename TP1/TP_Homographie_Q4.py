@@ -6,8 +6,8 @@ print("Version d'OpenCV: ",cv2. __version__)
 # Ouverture de l'image
 PATH_IMG = './Images_Homographie/'
 
-img1 = np.uint8(cv2.imread(PATH_IMG+"Amst-2.jpg"))
-img2 = np.uint8(cv2.imread(PATH_IMG+"Amst-3.jpg"))
+img1 = np.uint8(cv2.imread(PATH_IMG+"Amst-3.jpg"))
+img2 = np.uint8(cv2.imread(PATH_IMG+"Amst-2.jpg"))
 
 (h1,w1,c1) = img1.shape
 print("Dimension de l'image :",h1,"lignes x",w1,"colonnes x",c1,"couleurs")
@@ -122,8 +122,6 @@ H = np.dot(np.linalg.inv(T_norm), H)
 H = np.dot(H, T_norm)
 H = H/H[-1, -1]
 
-print("H =", H)
-
 # Fonction qui génère la matrice d'homographie
 # H = cv2.getPerspectiveTransform(X_init,X_final)
 # print("H_func =", H)
@@ -131,28 +129,10 @@ print("H =", H)
 ### Votre code d'estimation de H ici
 
 # Apliquer la matrice d'homographie
-img_warp = cv2.warpPerspective(clone1, H, (w1,h1))
+img_warp = cv2.warpPerspective(clone1, H, (clone1.shape[1]+clone2.shape[1],clone1.shape[0]))
 
 # Fusion des images
-panorama = np.maximum(img_warp, img2)
-# panorama = cv2.addWeighted(img1, 0.5, img_warp, 0.5, 0)
-# print("panorama =", panorama)
+img_warp[0:clone2.shape[0], 0:clone2.shape[1]] = clone2 
+panorama = img_warp
 cv2.imshow("Panorama", panorama)
 cv2.waitKey(0)
-
-
-
-
-# heigth = np.maximum(img1.shape[0], img2.shape[0])
-# width = np.maximum(img1.shape[1], img2.shape[1])
-# panorama = np.zeros((heigth,width,3), dtype=np.uint8)
-
-# img_ref_pad = []
-# img_ref_pad = cv2.copyMakeBorder(img1, 0, panorama.shape[0]-img1.shape[0], 0, panorama.shape[1]-img1.shape[1], cv2.BORDER_CONSTANT, value=[0, 0, 0])
-
-# for i in range(0, panorama.shape[0]):
-#     for j in range(0, panorama.shape[1]):
-#         panorama[i][j] = np.maximum(img_ref_pad[i][j], img2[i][j])
-
-# cv2.imshow("Panorama", panorama)
-# cv2.waitKey(0)
