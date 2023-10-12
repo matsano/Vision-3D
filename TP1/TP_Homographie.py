@@ -47,7 +47,7 @@ for i in range(points_selected):
 print("X_final =",X_final)
 
 
-#### Votre code d'estimation de H ici
+# Estimation de H
 
 # Coordonnees au format (x, y, 1)
 X_init_norm = np.hstack((X_init, np.ones((X_init.shape[0], 1))))
@@ -92,9 +92,7 @@ H = H/H[-1, -1]
 # Fonction qui génère la matrice d'homographie
 # H = cv2.getPerspectiveTransform(X_init,X_final)
 
-#### Votre code d'estimation de H ici
-
-# Juste un exemple pour afficher quelque chose
+# Afficher la perspective
 img_warp = cv2.warpPerspective(clone, H, (w,h))
 cv2.imshow("Image rectifiee",img_warp)
 cv2.waitKey(0)

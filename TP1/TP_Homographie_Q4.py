@@ -80,7 +80,7 @@ if (points_selected1 != points_selected2):
 	raise ValueError("Different number of points selected in the images.")
 
 
-#### Votre code d'estimation de H ici
+# Estimation de H
 
 # Coordonnees au format (x, y, 1)
 X_init_norm = np.hstack((X_init, np.ones((X_init.shape[0], 1))))
@@ -125,8 +125,6 @@ H = H/H[-1, -1]
 # Fonction qui génère la matrice d'homographie
 # H = cv2.getPerspectiveTransform(X_init,X_final)
 # print("H_func =", H)
-
-### Votre code d'estimation de H ici
 
 # Apliquer la matrice d'homographie
 img_warp = cv2.warpPerspective(clone1, H, (clone1.shape[1]+clone2.shape[1],clone1.shape[0]))

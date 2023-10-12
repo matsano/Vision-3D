@@ -83,7 +83,6 @@ def matchKeypoints(kpsA, kpsB, featuresA, featuresB,
 	# otherwise, no homograpy could be computed
 	return None
 
-
 print("Version d'OpenCV: ",cv2. __version__)
 
 # Ouverture de l'image
@@ -115,57 +114,6 @@ if M is None:
 	print('Error matching')
 	exit()
 (matches, H, status) = M
-
-
-#### Votre code d'estimation de H ici
-
-# Coordonnees au format (x, y, 1)
-# X_init_norm = np.hstack((X_init, np.ones((X_init.shape[0], 1))))
-# X_final_norm = np.hstack((X_final, np.ones((X_final.shape[0], 1))))
-
-# # Normalisation des coordonnees
-# T_norm = np.array([[1/w1, 0, -1],
-#                   [0, 1/h1, -1],
-#                   [0, 0, 1]])
-# X_init_norm = np.dot(T_norm, np.transpose(X_init_norm))
-# X_init_norm = np.transpose(X_init_norm)
-
-# X_final_norm = np.dot(T_norm, np.transpose(X_final_norm))
-# X_final_norm = np.transpose(X_final_norm)
-
-# # Retourner les coordonnees au format (x, y)
-# X_init_norm = X_init_norm[:, :-1]
-# X_final_norm = X_final_norm[:, :-1]
-
-# # Calculer la matrice A
-# A = []
-# for i in range(points_selected1):
-#     ax = np.array([-X_init_norm[i][0], -X_init_norm[i][1], -1, 0, 0, 0, X_final_norm[i][0]*X_init_norm[i][0], X_final_norm[i][0]*X_init_norm[i][1], X_final_norm[i][0]])
-#     ay = np.array([0, 0, 0, -X_init_norm[i][0], -X_init_norm[i][1], -1, X_final_norm[i][1]*X_init_norm[i][0], X_final_norm[i][1]*X_init_norm[i][1], X_final_norm[i][1]])
-#     A.append(ax)
-#     A.append(ay)
-
-# A = np.vstack(A)
-
-# # Obtenir h (derniere ligne de V = dernier vecteur propre)
-# U, S, V = np.linalg.svd(A)
-# h_homographie = V[-1, :]
-
-# # Obtenir la matrice d'homographie H
-# H = h_homographie.reshape(3, 3)
-
-# # De-normaliser la solution
-# H = np.dot(np.linalg.inv(T_norm), H)
-# H = np.dot(H, T_norm)
-# H = H/H[-1, -1]
-
-# print("H =", H)
-
-# Fonction qui génère la matrice d'homographie
-# H = cv2.getPerspectiveTransform(X_init,X_final)
-# print("H_func =", H)
-
-### Votre code d'estimation de H ici
 
 # Apliquer la matrice d'homographie
 img_warp = cv2.warpPerspective(clone1, H, (clone1.shape[1]+clone2.shape[1],clone1.shape[0]))
