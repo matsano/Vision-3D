@@ -43,12 +43,26 @@ import time
 
 
 def compute_plane(points):
-
-    
+    # Initialize the chosen point and the normal vector
     point = np.zeros((3,1))
     normal = np.zeros((3,1))
     
-    # TODO
+    # Choose one point from the three
+    point = points[:, 0]
+    
+    # Calculate the vectors of the other two points in relation to the chosen point
+    vet1 = points[:, 1] - point
+    vet2 = points[:, 2] - point
+    
+    # Calculate the normal of the plane using the cross product of vectors
+    normal = np.cross(vet1, vet2)
+    
+    # Normalize the normal vector
+    normal /= np.linalg.norm(normal)
+    
+    # Reshape point and normal
+    point = point.reshape(3, 1)
+    normal = normal.reshape(3, 1)
     
     return point, normal
 
@@ -151,7 +165,7 @@ if __name__ == '__main__':
     # ***********************************
     #
 
-    if True:
+    if False:
 
         # Define parameters of RANSAC
         NB_RANDOM_DRAWS = 100
@@ -180,7 +194,7 @@ if __name__ == '__main__':
     # *********************************
     #
 
-    if True:
+    if False:
 
         # Define parameters of multi_RANSAC
         NB_RANDOM_DRAWS = 200
