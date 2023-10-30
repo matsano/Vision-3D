@@ -48,11 +48,11 @@ def compute_plane(points):
     normal = np.zeros((3,1))
     
     # Choose one point from the three
-    point = points[:, 0]
+    point = points[0]
     
     # Calculate the vectors of the other two points in relation to the chosen point
-    vet1 = points[:, 1] - point
-    vet2 = points[:, 2] - point
+    vet1 = points[1] - point
+    vet2 = points[2] - point
     
     # Calculate the normal of the plane using the cross product of vectors
     normal = np.cross(vet1, vet2)
@@ -71,7 +71,14 @@ def in_plane(points, ref_pt, normal, threshold_in=0.1):
     
     indices = np.zeros(len(points), dtype=bool)
     
-    # TODO: return a boolean mask of points in range
+    # Calculate the vector from the plane point to the input point
+    vector_to_points = points - ref_pt.T
+    
+    # Calculate the distance between the points and the plane
+    distances = np.abs(np.dot(vector_to_points, normal))
+    
+    # Boolean mask of points whose distance to the plane are smaller than the threshold
+    indices = distances < threshold_in
         
     return indices
 
