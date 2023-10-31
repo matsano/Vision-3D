@@ -1,11 +1,5 @@
-import numpy as np
+import math
 
-# Exemplo 1: Encontrar índices onde um array atende a uma condição
-arr = np.array([1, 2, 3, 4, 5])
-indices = np.where(arr > 3)
-print(indices)  # Saída: (array([3, 4]),)
+t = math.log10(1-0.99) / math.log10(1 - (135729/412756)**3)
 
-# Exemplo 2: Atribuir um valor a elementos com base em uma condição
-arr = np.array([1, 2, 3, 4, 5])
-arr[np.where(arr > 3)] = 10
-print(arr)  # Saída: [ 1  2  3 10 10]
+print(t)

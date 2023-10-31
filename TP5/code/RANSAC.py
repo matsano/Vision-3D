@@ -217,7 +217,7 @@ if __name__ == '__main__':
     # ***********************************
     #
 
-    if False:
+    if True:
 
         # Define parameters of RANSAC
         NB_RANDOM_DRAWS = 100
@@ -235,6 +235,10 @@ if __name__ == '__main__':
         remaining_inds = (1-points_in_plane).nonzero()[0]
 
         # Save the best extracted plane and remaining points
+        print(f"The point cloud contains {N} points.")
+        print(f"The prominent plane contains {len(plane_inds)} points.")
+        print(f"The prominent plane has {100*(len(plane_inds)/N)}% of the points in the point cloud.")
+
         write_ply('../best_plane.ply',
                   [points[plane_inds], colors[plane_inds]],
                   ['x', 'y', 'z', 'red', 'green', 'blue'])
@@ -246,7 +250,7 @@ if __name__ == '__main__':
     # *********************************
     #
 
-    if True:
+    if False:
 
         # Define parameters of multi_RANSAC
         NB_RANDOM_DRAWS = 200
