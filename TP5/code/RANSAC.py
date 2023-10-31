@@ -88,20 +88,65 @@ def RANSAC(points, NB_RANDOM_DRAWS=100, threshold_in=0.1):
     best_ref_pt = np.zeros((3,1))
     best_normal = np.zeros((3,1))
     
-    # TODO:
+    # Initialize the maximum number of votes
+    most_votes = 0
+    
+    # Implement RANSAC
+    for i in range(NB_RANDOM_DRAWS):
+        # Get randomly three points from the cloud
+        pts = points[np.random.randint(0, N, size=3)]
+        
+        # Compute the plane they define
+        ref_pt, normal = compute_plane(pts)
+        
+        # Count how many points from the cloud are in range of this plane as votes
+        indices = in_plane(points, ref_pt, normal, threshold_in)
+        count_votes = sum(indices)
+        
+        # Update output
+        if count_votes > most_votes:
+            best_ref_pt = ref_pt
+            best_normal = normal
+            most_votes = count_votes
                 
     return best_ref_pt, best_normal
 
 
 def multi_RANSAC(points, NB_RANDOM_DRAWS=100, threshold_in=0.1, NB_PLANES=2):
+    NB_PLANES=2
     
     plane_inds = np.zeros((1,))
     remaining_inds = np.zeros((1,))
     plane_labels = np.zeros((1,))
+    
+    for i in range(NB_PLANES):
+        # Implement RANSAC
+        ref_pt, normal = RANSAC(points, NB_RANDOM_DRAWS, threshold_in)
+        
+        # Find points in the plane and others
+        points_in_plane = in_plane(points, ref_pt, normal, threshold_in)
+        plane_inds = points_in_plane.nonzero()[0]
+        remaining_inds = (1-points_in_plane).nonzero()[0]
+        
+        # Update outputs
+        # print(points_in_plane)
+        # print()
+        # print(np.where(points_in_plane)[0])
+        plane_labels[np.where(points_in_plane)[0]] = i
+        
+        # Update the cloud without the plane
+        points = points[remaining_inds]
+        
+    print("plane =", plane_inds)
+    print("remaining =", remaining_inds)
+    print("labels =", plane_labels)
 
     # TODO:
     
     return plane_inds, remaining_inds, plane_labels
+
+
+
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -137,7 +182,7 @@ if __name__ == '__main__':
     # ***********************************************************
     #
 
-    if True:
+    if False:
 
         # Define parameter
         threshold_in = 0.1
@@ -201,12 +246,13 @@ if __name__ == '__main__':
     # *********************************
     #
 
-    if False:
+    if True:
 
         # Define parameters of multi_RANSAC
         NB_RANDOM_DRAWS = 200
         threshold_in = 0.05
-        NB_PLANES = 5
+        # NB_PLANES = 5
+        NB_PLANES = 2
 
         # Recursively find best plane by RANSAC
         t0 = time.time()
