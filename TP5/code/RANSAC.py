@@ -88,6 +88,8 @@ def RANSAC(points, NB_RANDOM_DRAWS=100, threshold_in=0.1):
     best_ref_pt = np.zeros((3,1))
     best_normal = np.zeros((3,1))
     
+    N = len(points)
+    
     # Initialize the maximum number of votes
     most_votes = 0
     
@@ -113,36 +115,32 @@ def RANSAC(points, NB_RANDOM_DRAWS=100, threshold_in=0.1):
 
 
 def multi_RANSAC(points, NB_RANDOM_DRAWS=100, threshold_in=0.1, NB_PLANES=2):
-    NB_PLANES=2
     
-    plane_inds = np.zeros((1,))
-    remaining_inds = np.zeros((1,))
-    plane_labels = np.zeros((1,))
+    all_planes_inds = np.zeros((len(points), 1), np.int32)
+    plane_inds = np.zeros((0,), np.int32)
+    remaining_inds = np.ones((len(points), 1), np.int32)
+    plane_labels = np.zeros((0,), np.int32)
     
     for i in range(NB_PLANES):
         # Implement RANSAC
-        ref_pt, normal = RANSAC(points, NB_RANDOM_DRAWS, threshold_in)
+        ref_pt, normal = RANSAC(points[remaining_inds.nonzero()[0]], NB_RANDOM_DRAWS, threshold_in)
         
         # Find points in the plane and others
         points_in_plane = in_plane(points, ref_pt, normal, threshold_in)
-        plane_inds = points_in_plane.nonzero()[0]
-        remaining_inds = (1-points_in_plane).nonzero()[0]
         
-        # Update outputs
-        # print(points_in_plane)
-        # print()
-        # print(np.where(points_in_plane)[0])
-        plane_labels[np.where(points_in_plane)[0]] = i
+        # Update the remaining points without all the planes' points
+        all_planes_inds = np.logical_or(all_planes_inds, points_in_plane)
+        remaining_inds = (1-all_planes_inds)
         
-        # Update the cloud without the plane
-        points = points[remaining_inds]
+        # Update the plane inds
+        plane_inds = np.concatenate((plane_inds,points_in_plane.nonzero()[0]))
         
-    print("plane =", plane_inds)
-    print("remaining =", remaining_inds)
-    print("labels =", plane_labels)
-
-    # TODO:
+        # Update the plane labels
+        plane_labels = np.concatenate((plane_labels,((1+i)*np.ones((np.sum(points_in_plane))))))
     
+    # Get the remaining points index
+    remaining_inds = remaining_inds.nonzero()[0]
+
     return plane_inds, remaining_inds, plane_labels
 
 
@@ -217,7 +215,7 @@ if __name__ == '__main__':
     # ***********************************
     #
 
-    if True:
+    if False:
 
         # Define parameters of RANSAC
         NB_RANDOM_DRAWS = 100
@@ -250,7 +248,7 @@ if __name__ == '__main__':
     # *********************************
     #
 
-    if False:
+    if True:
 
         # Define parameters of multi_RANSAC
         NB_RANDOM_DRAWS = 200
