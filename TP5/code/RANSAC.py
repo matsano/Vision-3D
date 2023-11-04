@@ -253,8 +253,7 @@ if __name__ == '__main__':
         # Define parameters of multi_RANSAC
         NB_RANDOM_DRAWS = 200
         threshold_in = 0.05
-        # NB_PLANES = 5
-        NB_PLANES = 2
+        NB_PLANES = 5
 
         # Recursively find best plane by RANSAC
         t0 = time.time()
