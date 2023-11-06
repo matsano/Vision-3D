@@ -124,7 +124,6 @@ H = H/H[-1, -1]
 
 # Fonction qui génère la matrice d'homographie
 # H = cv2.getPerspectiveTransform(X_init,X_final)
-# print("H_func =", H)
 
 # Apliquer la matrice d'homographie
 img_warp = cv2.warpPerspective(clone1, H, (clone1.shape[1]+clone2.shape[1],clone1.shape[0]))
