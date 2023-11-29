@@ -9,7 +9,7 @@ TPs code implemented during the course:
 
 ## 🛠️ Software used
 
-This project was implemented in python.
+These projects were implemented in python.
 
 ## ✒️ Authors
 
