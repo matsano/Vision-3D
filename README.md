@@ -2,7 +2,10 @@
 Vision 3D (ROB317) Projects
 
 ## 📋 Description
-TPs code implemented during the course.
+TPs code implemented during the course:
+- TP1: Homography, SIFT and RANSAC
+- TP3: Point cloud and ICP
+- TP5: Point cloud and RANSAC
 
 ## 🛠️ Software used
 
