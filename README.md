@@ -13,10 +13,10 @@ These projects were implemented in python.
 
 ## ✒️ Authors
 
-- Arthur Coelho Ruback:
+- Arthur COELHO RUBACK:
     - [![GitHub](https://i.stack.imgur.com/tskMh.png) GitHub](https://github.com/arthur-ruback)
 
 - Matheus SANTOS SANO:
     - [![GitHub](https://i.stack.imgur.com/tskMh.png) GitHub](https://github.com/matsano)
 
-I would like to thank our professors Mr. Antoine Manzanera et Mr. François Goulette for the knowledge taught in ROB317 Course at [ENSTA Paris](https://www.ensta-paris.fr/).
+I would like to thank our professors Mr. Antoine Manzanera and Mr. François Goulette for the knowledge taught in ROB317 Course at [ENSTA Paris](https://www.ensta-paris.fr/).
