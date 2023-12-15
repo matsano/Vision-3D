@@ -1,5 +1,5 @@
 # Vision-3D
-Vision 3D (ROB317) Projects
+Vision 3D Projects
 
 ## 📋 Description
 TPs code implemented during the course:
